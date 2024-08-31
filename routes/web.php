@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatMessageController;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -26,11 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/chat/{user}', function (User $user) {
-        return Inertia::render('Chat', [
-            'user' => $user
-        ]);
-    })->name('chat');
+    Route::get('/chat/{receiver}', [ChatMessageController::class, 'index'])->name('chat');
 });
 
 require __DIR__.'/auth.php';
