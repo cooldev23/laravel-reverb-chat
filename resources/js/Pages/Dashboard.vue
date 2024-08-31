@@ -27,7 +27,9 @@ const props = defineProps({
                                 <p>{{ user.email }}</p>
                             </template>
                             <template #footer>
-                                <PrimaryOutlineButton><Link :href="route('chat', user)">Chat</Link></PrimaryOutlineButton>
+                                <div class="text-center">
+                                    <Link :href="route('chat', user)"><PrimaryOutlineButton>Chat</PrimaryOutlineButton></Link>
+                                </div>
                             </template>
                         </Card>
                     </div>
