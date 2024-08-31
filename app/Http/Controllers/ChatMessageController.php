@@ -5,23 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class ChatMessageController extends Controller
 {
     public function index(User $receiver) {
+        // dd($receiver);
         return inertia('Chat', [
             'receiver' => $receiver,
-            'previousMessages' => ChatMessage::where([
+            'messages' => ChatMessage::where([
                             ['sender_id', auth()->id()],
                             ['receiver_id', $receiver->id]
                         ])
-                        ->orWhere([
-                            ['sender_id', $receiver],
-                            ['receiver_id', auth()->id()]
-                        ])
+                        ->orWhere(function (Builder $query) use ($receiver) {
+                            $query->where('receiver_id', auth()->id())
+                                ->where('sender_id', $receiver->id);
+                        })
                         ->with(['sender', 'receiver'])
                         ->orderBy('id', 'asc')
                         ->get()
+        ]);
+    }
+
+    public function store(Request $request, User $receiver)
+    {
+        $chatMessage = ChatMessage::create([
+            'sender_id' => $request->senderId,
+            'receiver_id' => $request->receiverId,
+            'text' => $request->message
+        ]);
+
+        return to_route('chat', [
+            'receiver' => $receiver
         ]);
     }
 }
