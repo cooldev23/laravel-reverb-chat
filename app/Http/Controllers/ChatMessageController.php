@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Events\MessageSent;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,6 +35,8 @@ class ChatMessageController extends Controller
             'receiver_id' => $request->receiverId,
             'text' => $request->message
         ]);
+
+        broadcast(new MessageSent($chatMessage));
 
         return to_route('chat', [
             'receiver' => $receiver
