@@ -3,6 +3,10 @@
 ## Use
 Clone this repo and run the migrations, composer install and npm install.  Log in with two different users in two different browser tabs and chat between the two.
 
+```
+php artisan reverb:start
+```
+
 ### Other Considerations
 Create users with tinker
 ```
